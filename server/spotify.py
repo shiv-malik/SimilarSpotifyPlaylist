@@ -1,10 +1,11 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+from client_info import CLIENT_ID, CLIENT_SECRET
 
 sp = spotipy.Spotify(
     auth_manager = SpotifyOAuth(
-        client_id="e757f266ee7f47f9a63820ce78414a81",
-        client_secret="cd0aff901eb146df8ef1ca925c233051",
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
         # redirect_uri="https://localhost:5173",
         redirect_uri="https://google.com",
         scope="playlist-modify-public playlist-read-private"
@@ -34,7 +35,6 @@ class SimilarSpotifyPlaylist:
         features = SimilarSpotifyPlaylist.__getFeatures(tracks)
         dancability = sum([track['danceability'] for track in features]) / len(features)
         energy = sum([track['energy'] for track in features]) / len(features)
-
         recommendations = sp.recommendations(seed_tracks=tracks, 
                                             limit=int(self._ratio * len(tracks)),
                                             target_danceability=dancability,
@@ -45,7 +45,9 @@ class SimilarSpotifyPlaylist:
 
     def __createPlaylistFrame(self):
         user = sp.current_user()['id']
-        self._newPlaylist = sp.user_playlist_create(user=user, name=self._newPlaylistName, public=True)['id']
+        playlist = sp.user_playlist_create(user=user, name=self._newPlaylistName, public=True)
+        self._newPlaylist = playlist['id']
+        return playlist['external_urls']['spotify']
 
     def __addToPlaylist(self, tracks: list):
         sp.playlist_add_items(playlist_id=self._newPlaylist, items=tracks)
@@ -53,7 +55,7 @@ class SimilarSpotifyPlaylist:
     
     def createNewPlaylist(self):
         trackGenerator = self.__fetchTracks()
-        self.__createPlaylistFrame()
+        newPlaylistLink = self.__createPlaylistFrame()
         while True:
             try:
                 tracks = next(trackGenerator)
@@ -61,3 +63,5 @@ class SimilarSpotifyPlaylist:
                 self.__addToPlaylist(similarTracks)
             except StopIteration:
                 break
+        
+        return newPlaylistLink
