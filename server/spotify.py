@@ -18,7 +18,14 @@ sp = spotipy.Spotify(
 
 
 class SimilarSpotifyPlaylist:
-
+    '''
+    self._playlist: original playlist id.
+    self._playlistLength: number of songs in original playlist (used with ratio to calculate
+                          how many new songs to add to new playlist).
+    self._newPlaylistName: name of new playlist to create.
+    self._ratio: ratio of new songs to old songs (ie 1 means same number of songs, 2 means
+                 double the number of songs in the new playlist, etc.).
+    '''
     def __init__(self, playlistLink: str, newPlaylistName: str, ratio: int) -> None:
         self._playlist = (playlistLink.split('playlist/')[1]).split('?si=')[0]
         self._playlistLength = sp.playlist_items(self._playlist, fields='total')['total']
