@@ -11,7 +11,6 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState(false);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
