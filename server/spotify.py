@@ -2,6 +2,11 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from client_info import CLIENT_ID, CLIENT_SECRET
 
+'''
+Client info contains CLIENT_ID and CLIENT_SECRET which reference 
+actual keys. Client info not included in git.
+'''
+
 sp = spotipy.Spotify(
     auth_manager = SpotifyOAuth(
         client_id=CLIENT_ID,
@@ -25,7 +30,8 @@ class SimilarSpotifyPlaylist:
     @staticmethod
     def __getFeatures(tracks: list) -> list:
         '''
-        Static function which returns features such as energy and dancability of tracks passed in.
+        Static function which returns features such as energy and dancability of 
+        tracks passed in.
         '''
         return sp.audio_features(tracks)
 
@@ -58,7 +64,8 @@ class SimilarSpotifyPlaylist:
 
     def __createPlaylistFrame(self) -> None:
         '''
-        Creates new empty playlist that can be populated with songs. Returns new playlist link.
+        Creates new empty playlist that can be populated with songs. 
+        Returns new playlist link.
         '''
         user = sp.current_user()['id']
         playlist = sp.user_playlist_create(user=user, name=self._newPlaylistName, public=True)
@@ -67,10 +74,10 @@ class SimilarSpotifyPlaylist:
 
     def __addToPlaylist(self, tracks: list) -> None:
         '''
-        Adds tracks to new playlist.
+        Adds tracks to new playlist reference stored in class instance.
         '''
         sp.playlist_add_items(playlist_id=self._newPlaylist, items=tracks)
-    
+
     
     def createNewPlaylist(self):
         '''
