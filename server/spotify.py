@@ -11,7 +11,7 @@ sp = spotipy.Spotify(
     auth_manager = SpotifyOAuth(
         client_id=CLIENT_ID,
         client_secret=CLIENT_SECRET,
-        redirect_uri="https://localhost:5173",
+        redirect_uri="https://main.d2opt91wdlkjzo.amplifyapp.com",
         scope="playlist-modify-public playlist-read-private"
     )
 )
